@@ -1,0 +1,26 @@
+<UserControl x:Class="JSimulator.App.Views.ComparisonView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:JSimulator.App.ViewModels"
+             xmlns:oxy="http://oxyplot.org/wpf" mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance vm:ComparisonViewModel}">
+    <UserControl.Resources><BooleanToVisibilityConverter x:Key="BoolToVis" /></UserControl.Resources>
+    <Grid Margin="40,34,40,40"><Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="28" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+        <Grid Grid.Row="0"><StackPanel><TextBlock Text="Model comparison" Style="{StaticResource PageTitleText}" /><TextBlock Text="See how arrival and service variability change expected queue length." Style="{StaticResource PageSubtitleText}" /></StackPanel><Border HorizontalAlignment="Right" VerticalAlignment="Center" Background="#E9EFFF" CornerRadius="14" Padding="12,6"><TextBlock Text="VARIABILITY EXPLORER" Foreground="{StaticResource AccentBrush}" FontSize="10" FontWeight="SemiBold" /></Border></Grid>
+        <Grid Grid.Row="2"><Grid.ColumnDefinitions><ColumnDefinition Width="320" /><ColumnDefinition Width="24" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+            <Border Grid.Column="0" Style="{StaticResource CardBorder}" VerticalAlignment="Top"><StackPanel>
+                <TextBlock Text="Shared assumptions" Style="{StaticResource CardTitleText}" />
+                <StackPanel Visibility="{Binding HasImportedData, Converter={StaticResource BoolToVis}}"><TextBlock Text="Observed arrival rate λ (reference)" Style="{StaticResource FieldLabelText}" /><TextBox Style="{StaticResource InputTextBox}" Text="{Binding ObservedArrivalRate, Mode=OneWay, StringFormat=N4}" IsReadOnly="True" Margin="0,0,0,16" /></StackPanel>
+                <TextBlock Text="Service rate μ" Style="{StaticResource FieldLabelText}" /><TextBox Style="{StaticResource InputTextBox}" Text="{Binding ServiceRate, UpdateSourceTrigger=PropertyChanged, StringFormat=N4}" Margin="0,0,0,16" />
+                <TextBlock Text="Service SCV, Cs²" Style="{StaticResource FieldLabelText}" /><TextBox Style="{StaticResource InputTextBox}" Text="{Binding ServiceScv, UpdateSourceTrigger=PropertyChanged, StringFormat=N4}" Margin="0,0,0,16" />
+                <TextBlock Text="Arrival SCV, Ca²" Style="{StaticResource FieldLabelText}" /><TextBox Style="{StaticResource InputTextBox}" Text="{Binding ArrivalScv, UpdateSourceTrigger=PropertyChanged, StringFormat=N4}" />
+                <TextBlock Text="{Binding DataImportSummary}" Foreground="{StaticResource SuccessBrush}" TextWrapping="Wrap" FontSize="11" Margin="2,14,2,0" Visibility="{Binding HasDataImportSummary, Converter={StaticResource BoolToVis}}" />
+                <TextBlock Text="{Binding ChartStatus}" Foreground="{StaticResource DangerBrush}" TextWrapping="Wrap" FontSize="11" Margin="2,10,2,0" Visibility="{Binding HasChartStatus, Converter={StaticResource BoolToVis}}" />
+                <Border Background="#F4F7FC" CornerRadius="8" Padding="12" Margin="0,20,0,0"><TextBlock TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}">M/M/1 uses Ca² = Cs² = 1 as the baseline. The graph sweeps utilization; after import, the red dot marks the observed J. Data operating point.</TextBlock></Border>
+            </StackPanel></Border>
+            <Border Grid.Column="2" Style="{StaticResource CardBorder}" Padding="18"><Grid><Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions><DockPanel Margin="4,0,4,8"><TextBlock Text="Expected queue length across utilization" Style="{StaticResource CardTitleText}" /><TextBlock DockPanel.Dock="Right" Text="Lq" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Margin="0,3,0,0" /></DockPanel><oxy:PlotView Grid.Row="1" Model="{Binding ComparisonPlot}" Background="Transparent" /></Grid></Border>
+        </Grid>
+    </Grid>
+</UserControl>

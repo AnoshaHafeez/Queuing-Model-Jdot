@@ -1,0 +1,78 @@
+<UserControl x:Class="JSimulator.App.Views.CalculatorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:JSimulator.App.ViewModels"
+             xmlns:conv="clr-namespace:JSimulator.App.Converters"
+             xmlns:oxy="http://oxyplot.org/wpf" mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance vm:CalculatorViewModel}">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <conv:StringToVisibilityConverter x:Key="StringToVis" />
+        <conv:MetricFormatConverter x:Key="MetricFormat" />
+    </UserControl.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="40,34,40,40">
+            <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="28" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <StackPanel>
+                    <TextBlock Text="Queue calculation" Style="{StaticResource PageTitleText}" />
+                    <TextBlock Text="Explore steady-state performance for a single-server queue in real time." Style="{StaticResource PageSubtitleText}" />
+                </StackPanel>
+                <Border HorizontalAlignment="Right" VerticalAlignment="Center" Background="#E9EFFF" CornerRadius="14" Padding="12,6">
+                    <TextBlock Text="ANALYTICAL MODELS" Foreground="{StaticResource AccentBrush}" FontSize="10" FontWeight="SemiBold" />
+                </Border>
+            </Grid>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="330" /><ColumnDefinition Width="24" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Style="{StaticResource CardBorder}" VerticalAlignment="Top">
+                    <StackPanel>
+                        <TextBlock Text="Configure your queue" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Choose a model" Style="{StaticResource FieldLabelText}" />
+                        <ComboBox Style="{StaticResource InputComboBox}" ItemsSource="{Binding AvailableModels}" SelectedItem="{Binding SelectedModel}" Margin="0,0,0,18" />
+                        <Button Content="Import J. Data Excel (.xls / .xlsx)" Style="{StaticResource SecondaryButton}" Command="{Binding ImportDataCommand}" HorizontalAlignment="Stretch" Margin="0,0,0,8" />
+                        <TextBlock Text="Uses Date, Arrival_Time, Service_In, and Service_Out to estimate rates and variability." Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" TextWrapping="Wrap" Margin="2,0,2,16" />
+                        <TextBlock Text="Arrival rate λ" Style="{StaticResource FieldLabelText}" />
+                        <TextBox Style="{StaticResource InputTextBox}" Text="{Binding ArrivalRate, UpdateSourceTrigger=PropertyChanged, StringFormat=N4}" Margin="0,0,0,14" />
+                        <TextBlock Text="Service rate μ" Style="{StaticResource FieldLabelText}" />
+                        <TextBox Style="{StaticResource InputTextBox}" Text="{Binding ServiceRate, UpdateSourceTrigger=PropertyChanged, StringFormat=N4}" Margin="0,0,0,14" />
+                        <StackPanel Visibility="{Binding NeedsServiceVariance, Converter={StaticResource BoolToVis}}">
+                            <TextBlock Text="Service-time variance Var(S)" Style="{StaticResource FieldLabelText}" />
+                            <TextBox Style="{StaticResource InputTextBox}" Text="{Binding ServiceTimeVariance, UpdateSourceTrigger=PropertyChanged, StringFormat=N4}" Margin="0,0,0,14" />
+                        </StackPanel>
+                        <StackPanel Visibility="{Binding NeedsArrivalVariance, Converter={StaticResource BoolToVis}}">
+                            <TextBlock Text="Interarrival-time variance Var(A)" Style="{StaticResource FieldLabelText}" />
+                            <TextBox Style="{StaticResource InputTextBox}" Text="{Binding ArrivalTimeVariance, UpdateSourceTrigger=PropertyChanged, StringFormat=N4}" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource DangerBrush}" TextWrapping="Wrap" FontSize="12" Margin="2,12,0,0" Visibility="{Binding HasError, Converter={StaticResource BoolToVis}}" />
+                        <TextBlock Text="{Binding DataImportSummary}" Foreground="{StaticResource SuccessBrush}" TextWrapping="Wrap" FontSize="11" Margin="2,10,2,0" Visibility="{Binding HasDataImportSummary, Converter={StaticResource BoolToVis}}" />
+                        <Border Height="1" Background="{StaticResource CardBorderBrush}" Margin="0,20,0,16" />
+                        <Button Content="Export report as PDF" Style="{StaticResource PrimaryButton}" Command="{Binding ExportReportCommand}" HorizontalAlignment="Stretch" />
+                        <TextBlock Text="{Binding ReportStatus}" TextWrapping="Wrap" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="2,8,0,0" Visibility="{Binding ReportStatus, Converter={StaticResource StringToVis}}" />
+                    </StackPanel>
+                </Border>
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="20" /><RowDefinition Height="340" /></Grid.RowDefinitions>
+                    <Border Grid.Row="0" Style="{StaticResource CardBorder}">
+                        <StackPanel>
+                            <DockPanel>
+                                <TextBlock Text="Performance snapshot" Style="{StaticResource CardTitleText}" />
+                                <TextBlock DockPanel.Dock="Right" Text="LIVE" Foreground="{StaticResource SuccessBrush}" FontSize="10" FontWeight="SemiBold" Margin="0,3,0,0" />
+                            </DockPanel>
+                            <UniformGrid Columns="3">
+                                <StackPanel Margin="0,0,14,18"><TextBlock Text="{Binding Metrics.Rho, Converter={StaticResource MetricFormat}, ConverterParameter=P}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Utilization (ρ)" Style="{StaticResource MetricLabelText}" /></StackPanel>
+                                <StackPanel Margin="0,0,14,18"><TextBlock Text="{Binding Metrics.L, Converter={StaticResource MetricFormat}}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Customers in system (L)" Style="{StaticResource MetricLabelText}" /></StackPanel>
+                                <StackPanel Margin="0,0,14,18"><TextBlock Text="{Binding Metrics.Lq, Converter={StaticResource MetricFormat}}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Customers in queue (Lq)" Style="{StaticResource MetricLabelText}" /></StackPanel>
+                                <StackPanel Margin="0,0,14,0"><TextBlock Text="{Binding Metrics.W, Converter={StaticResource MetricFormat}}" Style="{StaticResource MetricValueText}" /><TextBlock Style="{StaticResource MetricLabelText}" Text="{Binding TimeUnitLabel, StringFormat='Time in system (W) · {0}'}" /></StackPanel>
+                                <StackPanel Margin="0,0,14,0"><TextBlock Text="{Binding Metrics.Wq, Converter={StaticResource MetricFormat}}" Style="{StaticResource MetricValueText}" /><TextBlock Style="{StaticResource MetricLabelText}" Text="{Binding TimeUnitLabel, StringFormat='Queue wait (Wq) · {0}'}" /></StackPanel>
+                                <StackPanel><TextBlock Text="{Binding Metrics.P0, Converter={StaticResource MetricFormat}, ConverterParameter=P}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Empty-system probability (P0)" Style="{StaticResource MetricLabelText}" /></StackPanel>
+                            </UniformGrid>
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Row="2" Style="{StaticResource CardBorder}" Padding="16"><oxy:PlotView Model="{Binding SensitivityPlot}" Background="Transparent" /></Border>
+                </Grid>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

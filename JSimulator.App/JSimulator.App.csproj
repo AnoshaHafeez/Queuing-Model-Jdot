@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>JSimulator.App</RootNamespace>
+    <AssemblyName>JSimulator</AssemblyName>
+    <ApplicationIcon></ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
+    <!-- Reads both legacy .xls and modern .xlsx files without requiring Excel to be installed. -->
+    <PackageReference Include="ExcelDataReader" Version="3.7.0" />
+    <!-- Required by ExcelDataReader to decode legacy .xls workbook encodings. -->
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JSimulator.Core\JSimulator.Core.csproj" />
+  </ItemGroup>
+
+</Project>

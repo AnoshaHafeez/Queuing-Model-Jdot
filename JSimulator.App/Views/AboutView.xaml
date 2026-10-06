@@ -1,0 +1,86 @@
+<UserControl x:Class="JSimulator.App.Views.AboutView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:JSimulator.App.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance vm:AboutViewModel}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="36">
+        <StackPanel MaxWidth="760" HorizontalAlignment="Left">
+
+            <TextBlock Text="About &amp; Help" Style="{StaticResource PageTitleText}" />
+            <TextBlock Text="What each model assumes, and the formulas behind the numbers." Style="{StaticResource PageSubtitleText}" />
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,24,0,16">
+                <StackPanel>
+                    <TextBlock Text="M/M/1" Style="{StaticResource CardTitleText}" Foreground="{StaticResource AccentBrush}" />
+                    <TextBlock Text="{Binding MM1Description}" TextWrapping="Wrap" FontSize="13" LineHeight="20"
+                               Foreground="{StaticResource TextSecondaryBrush}" Margin="0,4,0,10" />
+                    <Border Background="{StaticResource SidebarBgLighterBrush}" CornerRadius="6" Padding="12">
+                        <TextBlock Text="{Binding MM1Formula}" FontFamily="Consolas" FontSize="12.5"
+                                   Foreground="{StaticResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="M/G/1" Style="{StaticResource CardTitleText}" Foreground="{StaticResource SuccessBrush}" />
+                    <TextBlock Text="{Binding MG1Description}" TextWrapping="Wrap" FontSize="13" LineHeight="20"
+                               Foreground="{StaticResource TextSecondaryBrush}" Margin="0,4,0,10" />
+                    <Border Background="{StaticResource SidebarBgLighterBrush}" CornerRadius="6" Padding="12">
+                        <TextBlock Text="{Binding MG1Formula}" FontFamily="Consolas" FontSize="12.5"
+                                   Foreground="{StaticResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="G/G/1" Style="{StaticResource CardTitleText}" Foreground="#F59E0B" />
+                    <TextBlock Text="{Binding GG1Description}" TextWrapping="Wrap" FontSize="13" LineHeight="20"
+                               Foreground="{StaticResource TextSecondaryBrush}" Margin="0,4,0,10" />
+                    <Border Background="{StaticResource SidebarBgLighterBrush}" CornerRadius="6" Padding="12">
+                        <TextBlock Text="{Binding GG1Formula}" FontFamily="Consolas" FontSize="12.5"
+                                   Foreground="{StaticResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Glossary" Style="{StaticResource CardTitleText}" />
+                    <TextBlock TextWrapping="Wrap" FontSize="13" LineHeight="22" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,6,0,0">
+                        <Run FontFamily="Segoe UI Semibold">ρ (rho)</Run> — traffic intensity / utilization, λ ÷ μ.
+                        <LineBreak />
+                        <Run FontFamily="Segoe UI Semibold">L</Run> — expected number of customers in the whole system (queue + in service).
+                        <LineBreak />
+                        <Run FontFamily="Segoe UI Semibold">Lq</Run> — expected number of customers waiting in the queue only.
+                        <LineBreak />
+                        <Run FontFamily="Segoe UI Semibold">W</Run> — expected time a customer spends in the whole system.
+                        <LineBreak />
+                        <Run FontFamily="Segoe UI Semibold">Wq</Run> — expected time a customer spends waiting in the queue only.
+                        <LineBreak />
+                        <Run FontFamily="Segoe UI Semibold">P0</Run> — probability the system is empty at a random point in time.
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="About this app" Style="{StaticResource CardTitleText}" />
+                    <TextBlock TextWrapping="Wrap" FontSize="13" LineHeight="20" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,6,0,0">
+                        Queuing Suite — analytical calculators, discrete-event simulation, and PDF reporting for
+                        M/M/1, M/G/1 and G/G/1 queues. Built with .NET 8, WPF and OxyPlot.
+                    </TextBlock>
+                    <TextBlock Margin="0,10,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}">
+                        <Run Text="Version " /><Run Text="{Binding AppVersion, Mode=OneWay}" />
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
